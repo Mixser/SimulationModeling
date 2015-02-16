@@ -44,7 +44,7 @@ class LinearCongruentialGenerator(CongruentialGenerator):
     def _generate_next(self):
         self._x = self.x0 if not self._x else \
             (self.a * self._x + self.c) % self.m
-        return float(self._x) / self.m
+        return self._x
 
 
 class SquareCongruentialGenerator(CongruentialGenerator):
