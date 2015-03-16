@@ -16,7 +16,7 @@ def init_generator(klass):
     return klass(**kwargs)
 
 def init_generators():
-    g1 = LinearCongruentialGenerator(a=106, c=1283, x0=1, m=6075)
+    g1 = LinearCongruentialGenerator(a=106, c=, x0=1, m=6075)
     # g1 = init_generator(LinearCongruentialGenerator)
 
     g2 = SquareCongruentialGenerator(a=106, b=1283, c=123, x0=1, m=6075)
@@ -39,9 +39,10 @@ if __name__ == '__main__':
         values = generator.get_list(n)
         raw_moment = StatisticsUtils.E_k(values, s)
         central_moments = StatisticsUtils.central_moments(values, s)
-        print values
+        print values[:3000]
         print "Raw moments: %s;" % raw_moment
         print "Central moments: %s;" % central_moments
+        values = values[:3000]
         plt.plot(values[:-1], values[1:], 'ro')
 
         plt.axis([0, 1.0, 0, 1.0])

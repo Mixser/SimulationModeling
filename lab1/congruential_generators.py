@@ -42,7 +42,7 @@ class LinearCongruentialGenerator(CongruentialGenerator):
         super(LinearCongruentialGenerator, self).__init__(**kwargs)
 
     def _generate_next(self):
-        self._x = self.x0 if not self._x else \
+        self._x = self.x0 if self._x is None else \
             (self.a * self._x + self.c) % self.m
         return self._x
 
