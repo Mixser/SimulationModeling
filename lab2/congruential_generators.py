@@ -46,6 +46,11 @@ class LinearCongruentialGenerator(CongruentialGenerator):
             (self.a * self._x + self.c) % self.m
         return self._x
 
+    @property
+    def nextDouble(self):
+        return float(self.next) / self.m
+    
+
 
 class SquareCongruentialGenerator(CongruentialGenerator):
     NEEDED_PARAMS = ('a', 'b', 'c', 'm', 'x0')
