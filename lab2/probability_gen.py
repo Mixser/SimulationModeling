@@ -1,7 +1,3 @@
-#-*- coding: utf-8 -*-
-# python 2
-
-
 from abc import ABCMeta, abstractmethod
 from congruential_generators import LinearCongruentialGenerator
 
@@ -84,18 +80,24 @@ def get_generators(count):
 
     return result
 
-def draw_hist(gen, h):
+def draw_hist(gen, n=10000, k=1, h=1):
     import numpy as np
     import matplotlib.mlab as mlab
     import matplotlib.pyplot as plt
 
-    x = [gen.next for i in xrange(0, 10000)]
+    values = [gen.next for i in xrange(0, n)]
 
-    max_x = max(x)
-    min_x = min(x)
+    avg = reduce(lambda x,y : x + float(y/n), values, 0)
 
-    n, bins, patches = plt.hist(x, 50, normed=True, facecolor='green', alpha=0.75)
-    mu, sigma = 100, 15
+    sample_moment = reduce(lambda x, y: x + float(y**k)/n, values, 0)
+    sample_central_moment = reduce(lambda x, y: x + float((y - avg)**k)/n, values, 0)
+
+    max_x = max(values)
+    min_x = min(values)
+
+    n, bins, patches = plt.hist(values, 50, normed=True, facecolor='green', alpha=0.75)
+
+    plt.title("Sample moments: %s, central moment: %s" % (sample_moment, sample_central_moment))
 
     plt.xlabel('Smarts')
     plt.ylabel('Probability')
@@ -107,16 +109,16 @@ def draw_hist(gen, h):
 
 def benominal_generator():
     gen = BinominalGenarator(p=0.7, generators=get_generators(20))
-    draw_hist(gen, 1)
+    draw_hist(gen, n=10000, k=2, h=1)
 
 
 def poisson_generator():
     m = 2**32 - 1
     l = LinearCongruentialGenerator(a=48271, m=m, c=0, x0=4)
 
-    gen = PoissonGenerator(p=1, generator=l)
+    gen = PoissonGenerator(p=10, generator=l)
 
-    draw_hist(gen, 10)
+    draw_hist(gen, n=10000, k=2, h=0.5)
 
 
 def geometry_generator():
@@ -125,20 +127,14 @@ def geometry_generator():
 
     gen = GeometryGenerator(p=0.2, gen=l)
 
-    for x in xrange(0, 1000):
-        print gen.next
-
-    draw_hist(gen, 2)
-
-
-
+    draw_hist(gen, n=10000, k=2, h=2)
 
 
 if __name__ == "__main__":
     
-    # benominal_generator()
+    benominal_generator()
     poisson_generator()
-    # geometry_generator()
+    geometry_generator()
     
 
     
