@@ -4,7 +4,6 @@ from probability_gen import BinominalGenarator, GeometryGenerator, PoissonGenera
 
 from tests import PirsonTest
 
-
 def get_generators(count):
     from numpy import random
 
@@ -47,7 +46,7 @@ def benominal_generator():
 
     test = PirsonTest()
 
-    print test.check(10000, 19, gen)
+    print test.check(10000,gen)
 
     draw_hist(gen, n=10000, k=19, h=1)
 
@@ -59,7 +58,7 @@ def poisson_generator():
     gen = PoissonGenerator(p=10, generator=l)
 
     
-    print test.check(10000, freedom ,gen)
+    print test.check(10000, gen)
 
     draw_hist(gen, n=10000, k=2, h=0.5)
 
@@ -68,9 +67,8 @@ def geometry_generator():
     m = 2**32 - 1
     l = LinearCongruentialGenerator(a=48271, m=m, c=0, x0=4)
     gen = GeometryGenerator(p=0.2, gen=l)
-    arr = [gen.next for i in xrage(0, 10000)]
 
-    print test.check(10000, 16, gen)
+    print test.check(10000, gen)
 
     # draw_hist(gen, n=10000, k=2, h=2)
 
@@ -78,8 +76,8 @@ def geometry_generator():
 if __name__ == "__main__":
     
     benominal_generator()
-    # poisson_generator()
-    # geometry_generator()
+    poisson_generator()
+    geometry_generator()
     
 
     
