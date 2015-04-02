@@ -5,7 +5,7 @@ from congruential_generators import LinearCongruentialGenerator
 from tests import PirsonTest
 
 
-from math import factorial, ceil, exp
+from math import factorial, ceil, exp, floor
 
 
 class ProbabilityGenerator(object):
@@ -23,6 +23,11 @@ class ProbabilityGenerator(object):
 
     @abstractmethod
     def probability_func(self, x):
+        pass
+
+
+    @abstractmethod
+    def distribution_func(self, x):
         pass
 
 
@@ -55,6 +60,13 @@ class BinominalGenarator(ProbabilityGenerator):
         return m_k * self.p ** x * (1-self.p)**(m-x)
 
 
+    def distribution_func(self, x):
+        from scipy.stats import binom
+        n = len(self.generators)
+        return binom.cdf(x, n=n, p=self.p)
+
+
+
 class GeometryGenerator(ProbabilityGenerator):
     NEED_PARAMS = ['gen', 'p']
 
@@ -63,12 +75,22 @@ class GeometryGenerator(ProbabilityGenerator):
         self.q = 1 - self.p
 
     def probability_func(self, x):
-        x = ceil(x)
-        return self.p*(1-self.p)**(x-1)
+
+        from scipy.stats import geom
+
+        return geom.ppf(x, self.p)
+
+
+    def distribution_func(self, x):
+        from scipy.stats import geom
+        return geom.cdf(x, self.p)
 
     def _generate_next(self):
         from math import log, ceil
-        return ceil(log(self.gen.nextDouble) / log(self.q))
+        from scipy.stats import geom
+        return geom.rvs(self.p)
+
+        # return floor(log(1 - self.gen.nextDouble) / log(self.q))
 
 
 class PoissonGenerator(ProbabilityGenerator):
@@ -82,6 +104,12 @@ class PoissonGenerator(ProbabilityGenerator):
         first = float(self.p ** x) / factorial(x)
         second = exp(-self.p)
         return first * second
+
+    def distribution_func(self, x):
+        from scipy.stats import poisson
+        return poisson.cdf(x, self.p)
+
+
 
     def _generate_next(self):
         from math import exp
