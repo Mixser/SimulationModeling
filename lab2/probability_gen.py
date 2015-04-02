@@ -48,11 +48,11 @@ class BinominalGenarator(ProbabilityGenerator):
 
 
     def probability_func(self, x):
-        k = ceil(x)
+        x = ceil(x)
         m = len(self.generators)
-        m_k = float(factorial(m)) / (factorial(m - k) * factorial(k))
+        m_k = float(factorial(m)) / (factorial(max(0, m - x)) * factorial(x))
 
-        return m_k * self.p ** k * (1-self.p)**(m-k)
+        return m_k * self.p ** x * (1-self.p)**(m-x)
 
 
 class GeometryGenerator(ProbabilityGenerator):
@@ -79,7 +79,7 @@ class PoissonGenerator(ProbabilityGenerator):
 
     def probability_func(self, x):
         x = ceil(x)
-        first = float(self.p ** x)/factorial(x)
+        first = float(self.p ** x) / factorial(x)
         second = exp(-self.p)
         return first * second
 

@@ -8,18 +8,26 @@ class PirsonTest(object):
 
         min_value = min(sequence)
         max_value = max(sequence)
+
+
+        
         h = float(max_value - min_value) /  k
 
+        print min_value, max_value, h
+
+
         segments = [min_value + h]
+        print segments
 
-        frequence = [0 for i in xrange(0, k)]
-
+        frequence = [0.0 for i in xrange(0, k + 1)]
+        print 'h', h
         for i in xrange(1, k):
+            print segments
             segments.append(segments[i-1] + h)
 
         for i in xrange(0, n):
             j = 0
-            while (sequence[i] > segments[j]):
+            while (sequence[i] >= segments[j]):
                 j += 1
                 if (j == k):
                     j -= 1
@@ -27,8 +35,15 @@ class PirsonTest(object):
             frequence[j] += 1
 
         hi = 0.0
-        for j in xrange(0, k):
-            hi += pow(frequence[j] - gen.probability_func(h * j), 2) / gen.probability_func(h * j)
+
+        print frequence
+
+        for i in xrange(0, k):
+            print '->', frequence[i], n * gen.probability_func(segments[i])
+            h = frequence[i] - n * gen.probability_func(segments[i])
+            d = n * gen.probability_func(i)
+            print h, d
+
+            hi += h * h / d
 
         return hi
-
