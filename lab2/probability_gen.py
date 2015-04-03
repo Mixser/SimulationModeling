@@ -53,11 +53,13 @@ class BinominalGenarator(ProbabilityGenerator):
 
 
     def probability_func(self, x):
-        x = ceil(x)
-        m = len(self.generators)
-        m_k = float(factorial(m)) / (factorial(max(0, m - x)) * factorial(x))
+        from scipy import stats
+        return stats.binom.pmf(x, len(self.generators), self.p)
+        # x = ceil(x)
+        # m = len(self.generators)
+        # m_k = float(factorial(m)) / (factorial(max(0, m - x)) * factorial(x))
 
-        return m_k * self.p ** x * (1-self.p)**(m-x)
+        # return m_k * self.p ** x * (1-self.p)**(m-x)
 
 
     def distribution_func(self, x):
@@ -78,7 +80,7 @@ class GeometryGenerator(ProbabilityGenerator):
 
         from scipy.stats import geom
 
-        return geom.ppf(x, self.p)
+        return self.p * (1-self.p)**x 
 
 
     def distribution_func(self, x):
@@ -88,9 +90,7 @@ class GeometryGenerator(ProbabilityGenerator):
     def _generate_next(self):
         from math import log, ceil
         from scipy.stats import geom
-        return geom.rvs(self.p)
-
-        # return floor(log(1 - self.gen.nextDouble) / log(self.q))
+        return floor(log(1 - self.gen.nextDouble) / log(self.q))
 
 
 class PoissonGenerator(ProbabilityGenerator):
@@ -100,10 +100,12 @@ class PoissonGenerator(ProbabilityGenerator):
         super(PoissonGenerator, self).__init__(*args, **kwargs)
 
     def probability_func(self, x):
-        x = ceil(x)
-        first = float(self.p ** x) / factorial(x)
-        second = exp(-self.p)
-        return first * second
+        from scipy import stats
+        return stats.poisson.pmf(x, self.p)
+        # x = ceil(x)
+        # first = float(self.p ** x) / factorial(x)
+        # second = exp(-self.p)
+        # return first * second
 
     def distribution_func(self, x):
         from scipy.stats import poisson
