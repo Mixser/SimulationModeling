@@ -41,41 +41,38 @@ def draw_hist(gen, n=10000, k=1, h=1):
     plt.show()
 
 
-def benominal_generator():
+def binominal_generator():
     gen = BinominalGenarator(p=0.7, generators=get_generators(20))
 
-    test = PirsonTest()
+    print PirsonTest.check(100,gen)
 
-    print test.check(10000,gen)
-
-    draw_hist(gen, n=10000, k=19, h=1)
+    draw_hist(gen, n=100, k=20, h=1)
 
 
 def poisson_generator():
     m = 2**32 - 1
     l = LinearCongruentialGenerator(a=48271, m=m, c=0, x0=4)
-    test = PirsonTest()
-    gen = PoissonGenerator(p=10, generator=l)
+    
+    gen = PoissonGenerator(p=4, generator=l)
 
     
-    print test.check(10000, gen)
+    print PirsonTest.check(10000, gen)
 
-    draw_hist(gen, n=10000, k=2, h=0.5)
+    draw_hist(gen, n=10000, k=22, h=1)
 
 
 def geometry_generator():
     m = 2**32 - 1
     l = LinearCongruentialGenerator(a=48271, m=m, c=0, x0=4)
-    gen = GeometryGenerator(p=0.2, gen=l)
+    gen = GeometryGenerator(p=0.3, gen=l)
+    print PirsonTest.check(10000, gen)
 
-    print test.check(10000, gen)
-
-    # draw_hist(gen, n=10000, k=2, h=2)
+    draw_hist(gen, n=10000, k=20, h=0.8)
 
 
 if __name__ == "__main__":
     
-    benominal_generator()
+    binominal_generator()
     poisson_generator()
     geometry_generator()
     
