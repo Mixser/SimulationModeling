@@ -1,0 +1,17 @@
+HELPDESK        STORAGE       2
+    GENERATE        6,3
+    ADVANCE         (Exponential(1,0,2)),,
+          ENTER            HELPDESK
+    TRANSFER         ALL,OPR1,OPR2,3
+OPR1      SEIZE            OP1
+    ASSIGN          1,OP1
+    TRANSFER        ,COME
+OPR2      SEIZE            OP2
+    ASSIGN          1,OP2
+COME      LEAVE            HELPDESK
+    ADVANCE         10,8
+    RELEASE          P1
+    TERMINATE       0
+    GENERATE        480
+    TERMINATE       1
+        START           1
