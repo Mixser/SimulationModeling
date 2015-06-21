@@ -1,0 +1,23 @@
+def get_intervals(obj):
+    MILLISECONDS_IN_HOUR = 60 * 60 * 1000
+    result = [0 for k in xrange(24)]
+
+    for interval in obj.time_intervals.all():
+        start_date, end_date = interval.start, interval.finish
+        start_hour, end_hour = start_date.hour, end_date.hour
+
+        for hour in xrange(start_hour + 1, end_hour):
+            result[hour] = MILLISECONDS_IN_HOUR
+
+        if start_hour == end_hour:
+            diff = int((end_date - start_date).total_seconds() * 1000)
+            result[start_hour] = (result[start_hour] + diff) % MILLISECONDS_IN_HOUR
+        else:
+            ceil_hour = start_date.replace(minute=0, second=0, microsecond=0) + timedelta(0, 3600)
+            floor_hour = end_date.replace(minute=0, second=0, microsecond=0)
+            start_milliseconds = int((ceil_hour - start_date).total_seconds() * 1000)
+            end_milliseconds = int((end_date - floor_hour).total_seconds() * 1000)
+
+            result[start_hour] = (result[start_hour] + start_milliseconds) % MILLISECONDS_IN_HOUR
+            result[end_hour] = (result[end_hour] + end_milliseconds) % MILLISECONDS_IN_HOUR 
+    return result

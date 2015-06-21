@@ -89,7 +89,7 @@ class LaplaceDistribution(ContinuosDistribution):
 if __name__ == '__main__':
     import matplotlib.pyplot as plt
 
-    a = UniformDistribution(a=0, b=1.0)
+    a = UniformDistribution(a=5, b=15)
     # a = ExponentialDistribution(lam=5)
     # a = LaplaceDistribution(lam=5.0)
 
@@ -109,7 +109,7 @@ if __name__ == '__main__':
 
     plt.xlabel('Smarts')
     plt.ylabel('Probability')
-    plt.axis([-2.0, 2.0, 0, 5.0])
+    plt.axis([-2.0, 15.0, 0, 0.2])
     plt.grid(True)
 
     plt.show()
